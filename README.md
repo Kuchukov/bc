@@ -1,1 +1,1 @@
-# bc_miner
+# bc
