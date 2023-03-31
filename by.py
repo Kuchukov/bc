@@ -22,12 +22,12 @@ def main():
     else:
         auth = None
 
-    previous_block_hash = ''
+    top_block_hash = ''
     lock = threading.Lock()
     print(args)
 
     def worker(start_nonce, end_nonce):
-        nonlocal previous_block_hash
+        nonlocal top_block_hash
         nonce = start_nonce
         while nonce < end_nonce:
             try:
@@ -44,24 +44,24 @@ def main():
 
                 if result:
                     with lock:
-                        if result['previous_block_hash'] != previous_block_hash:
-                            print(f'PRIVIOUS BLOCK HASH: {result["previous_block_hash"]}')
-                            previous_block_hash = result['previous_block_hash']
+                        if result['top_block_hash'] != top_block_hash:
+                            print(f'TOP BLOCK HASH: {result["top_block_hash"]}')
+                            top_block_hash = result['top_block_hash']
 
-                    block_header = bytes.fromhex(previous_block_hash) if previous_block_hash else b''
+                    block_header = bytes.fromhex(top_block_hash) if top_block_hash else b''
                     while nonce < end_nonce:
                         nonce_bytes = nonce.to_bytes(4, byteorder='little')
                         block_header_with_nonce = block_header + nonce_bytes
                         new_block_hash = cn_hash(block_header_with_nonce, state=bytes.fromhex(result.get('blocktemplate_blob', '')))
                         if int.from_bytes(new_block_hash, byteorder='little') < result.get('difficulty', 0):
                             with lock:
-                                if new_block_hash.hex() != previous_block_hash:
+                                if new_block_hash.hex() != top_block_hash:
                                     print(f'NEW BLOCK HASH FOUND: {new_block_hash.hex()}')
                                     try:
                                         submit_block(args.url, result.get('blocktemplate_blob', ''))
                                     except Exception as e:
                                         print(f"Error submitting block: {e}")
-                                    previous_block_hash = new_block_hash.hex()
+                                    top_block_hash = new_block_hash.hex()
                                     break
                         nonce += 1
                 else:
