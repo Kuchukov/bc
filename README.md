@@ -2,4 +2,4 @@ python3 by.py --url http://192.168.1.7:8081 --address "bcnZKxVKM3aaa5qGKos5UVK4K
 
 
 
-# Cryptonight
+# Cryptonight, OpenAI
