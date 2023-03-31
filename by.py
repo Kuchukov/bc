@@ -46,9 +46,7 @@ def main():
                     with lock:
                         if result['previous_block_hash'] != previous_block_hash:
                             print(f'PRIVIOUS BLOCK HASH: {result["previous_block_hash"]}')
-                            new_previous_block_hash = result['previous_block_hash']
-                            if new_previous_block_hash != previous_block_hash:
-                               previous_block_hash = new_previous_block_hash
+                            previous_block_hash = result['previous_block_hash']
 
                     block_header = bytes.fromhex(previous_block_hash) if previous_block_hash else b''
                     while nonce < end_nonce:
