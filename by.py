@@ -47,7 +47,6 @@ def main():
                         if result['previous_block_hash'] != previous_block_hash:
                             print(f'PRIVIOUS BLOCK HASH: {result["previous_block_hash"]}')
                             new_previous_block_hash = result['previous_block_hash']
-                            # Проверяем еще раз, чтобы убедиться, что другой поток не обновил переменную с момента последней проверки
                             if new_previous_block_hash != previous_block_hash:
                                previous_block_hash = new_previous_block_hash
 
